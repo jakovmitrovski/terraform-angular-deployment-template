@@ -27,9 +27,9 @@ jobs:
     steps:
       - name: Add profile credentials to ~/.aws/credentials
         run: |
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} --profile afillix
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile afillix
-          aws configure set region ${{ env.AWS_REGION }} --profile afillix
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set region ${{ env.AWS_REGION }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -49,7 +49,7 @@ jobs:
         run: terraform -chdir=./infrastructure fmt -recursive -check
 
       - name: Terraform Plan
-        run: terraform -chdir=./entrypoint plan -var "aws_region=${{ env.AWS_REGION }}" -var "aws_profile=afillix" -var "app_name=${{ env.APP_NAME }}" -var "certificate_arn=${{ secrets.AWS_CERTIFICATE_ARN }}" -var "domain_name=${{ env.DOMAIN_NAME }}"
+        run: terraform -chdir=./entrypoint plan -var "aws_region=${{ env.AWS_REGION }}" -var "app_name=${{ env.APP_NAME }}" -var "certificate_arn=${{ secrets.AWS_CERTIFICATE_ARN }}" -var "domain_name=${{ env.DOMAIN_NAME }}"
 
       - name: Terraform Apply
-        run: terraform -chdir=./entrypoint apply -auto-approve -var "aws_region=${{ env.AWS_REGION }}" -var "aws_profile=afillix" -var "app_name=${{ env.APP_NAME }}" -var "certificate_arn=${{ secrets.CERTIFICATE_ARN }}" -var "domain_name=${{ env.DOMAIN_NAME }}"
+        run: terraform -chdir=./entrypoint apply -auto-approve -var "aws_region=${{ env.AWS_REGION }}" -var "app_name=${{ env.APP_NAME }}" -var "certificate_arn=${{ secrets.CERTIFICATE_ARN }}" -var "domain_name=${{ env.DOMAIN_NAME }}"
