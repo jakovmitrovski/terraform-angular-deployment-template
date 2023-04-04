@@ -28,6 +28,8 @@ jobs:
 
       - name: Git Checkout
         uses: actions/checkout@v3
+        with:
+          persist-credentials: false
 
       - name: Add profile credentials to ~/.aws/credentials
         run: |
