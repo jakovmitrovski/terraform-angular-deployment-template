@@ -1,0 +1,55 @@
+name: Deploy webapp
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  terraform-validate:
+    name: 'Terraform'
+    env:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Add profile credentials to ~/.aws/credentials
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} --profile ${{ env.AWS_PROFILE_NAME }}"
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile ${{ env.AWS_PROFILE_NAME }}"
+          aws configure set region ${{ env.AWS_REGION }} --profile ${{ env.AWS_PROFILE_NAME }}"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.10.0
+
+      - name: Setup Angular CLI
+        run: npm install -g @angular/cli > /dev/null
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        run: terraform -chdir=./infrastructure init -backend-config=./config/backend.conf
+
+      - name: Terraform Format
+        run: terraform -chdir=./infrastructure fmt -recursive -check
+
+      - name: Terraform Plan
+        run: terraform -chdir=./entrypoint plan -var "aws_region=${{ env.AWS_REGION }}" -var "aws_profile=${{ env.AWS_PROFILE_NAME }}" -var "app_name=${{ env.APP_NAME }}" -var "certificate_arn=${{ secrets.AWS_CERTIFICATE_ARN }}" -var "domain_name=${{ env.DOMAIN_NAME }}"
+
+      - name: Terraform Apply
+        run: terraform -chdir=./entrypoint apply -auto-approve -var "aws_region=${{ env.AWS_REGION }}" -var "aws_profile=${{ env.AWS_PROFILE_NAME }}" -var "app_name=${{ env.APP_NAME }}" -var "certificate_arn=${{ secrets.CERTIFICATE_ARN }}" -var "domain_name=${{ env.DOMAIN_NAME }}"
