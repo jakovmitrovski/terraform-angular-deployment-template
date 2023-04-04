@@ -27,6 +27,7 @@
 - Open the newly created repository and go to the `Settings` tab.
 - Go to the `Secrets and variables` tab and open `Actions`
 - For secrets, create New repository secrets
+  - Add `PULL_KEY_REPO` with the value of a github access token generated from an account that has access to that reposotory.
   - Add `AWS_ACCESS_KEY_ID` with the value of the access key of the user you created in the previous step.
   - Add `AWS_SECRET_ACCESS_KEY` with the value of the secret key of the user you created in the previous step.
   - When available, issue a certificate for the domain name of the webapp and add `AWS_CERTIFICATE_ARN` with the value of the certificate arn. A certificate can be issued from the [AWS Certificate Manager](https://console.aws.amazon.com/acm/home?region=us-east-1#/) by clicking on `General` tab and then `Edit` and then `Request a certificate` when browsing the created cloudfront distribution.
