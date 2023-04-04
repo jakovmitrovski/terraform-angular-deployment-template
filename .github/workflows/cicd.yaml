@@ -31,11 +31,11 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Add profile credentials to ~/.aws/credentials
+      - name: Add profile credentials
         run: |
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} --profile default
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile default
-          aws configure set region ${{ env.AWS_REGION }} --profile default
+          aws configure set region eu-central-1 --profile default
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
