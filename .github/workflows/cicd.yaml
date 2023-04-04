@@ -27,9 +27,9 @@ jobs:
     steps:
       - name: Add profile credentials to ~/.aws/credentials
         run: |
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} --profile ${{ env.AWS_PROFILE_NAME }}"
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile ${{ env.AWS_PROFILE_NAME }}"
-          aws configure set region ${{ env.AWS_REGION }} --profile ${{ env.AWS_PROFILE_NAME }}"
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} --profile ${{ env.AWS_PROFILE_NAME }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile ${{ env.AWS_PROFILE_NAME }}
+          aws configure set region ${{ env.AWS_REGION }} --profile ${{ env.AWS_PROFILE_NAME }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
