@@ -41,4 +41,4 @@
 # Pipeline
 - Any changes on the source-code will trigger the pipeline.
 - This will result in automatic rebuild of the angular project and the creation of an invalidation.
-- The changes should be visible once the pipeline ends.
+- The changes should be visible once the pipeline ends and the invalidation is completed (status can be checked in the AWS console -> cloudfront -> invalidations).
