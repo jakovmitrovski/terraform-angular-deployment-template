@@ -33,9 +33,9 @@ jobs:
 
       - name: Add profile credentials
         run: |
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} --profile default
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile default
-          aws configure set region eu-central-1 --profile default
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set region ${{ vars.AWS_REGION }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -55,7 +55,7 @@ jobs:
         run: terraform -chdir=./infrastructure fmt -recursive -check
 
       - name: Terraform Plan
-        run: terraform -chdir=./infrastructure plan -var "aws_region=${{ env.AWS_REGION }}" -var "app_name=${{ env.APP_NAME }}" -var "certificate_arn=${{ secrets.AWS_CERTIFICATE_ARN }}" -var "domain_name=${{ env.DOMAIN_NAME }}"
+        run: terraform -chdir=./infrastructure plan -var "aws_region=${{ vars.AWS_REGION }}" -var "app_name=${{ vars.APP_NAME }}" -var "certificate_arn=${{ secrets.AWS_CERTIFICATE_ARN }}" -var "domain_name=${{ vars.DOMAIN_NAME }}"
 
       - name: Terraform Apply
-        run: terraform -chdir=./infrastructure apply -auto-approve -var "aws_region=${{ env.AWS_REGION }}" -var "app_name=${{ env.APP_NAME }}" -var "certificate_arn=${{ secrets.CERTIFICATE_ARN }}" -var "domain_name=${{ env.DOMAIN_NAME }}"
+        run: terraform -chdir=./infrastructure apply -auto-approve -var "aws_region=${{ vars.AWS_REGION }}" -var "app_name=${{ vars.APP_NAME }}" -var "certificate_arn=${{ secrets.CERTIFICATE_ARN }}" -var "domain_name=${{ vars.DOMAIN_NAME }}"
